@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class TranslationManager {
+public final class TranslationManager {
 	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 	public static final List<Locale> BUNDLED_LOCALES = List.of(new Locale("fi", "FI"));
 
