@@ -30,7 +30,7 @@ public class SpawnCommand extends AbstractCommand {
 	private void spawnHandler(CommandContext<Player> context) {
 		Player sender = context.sender();
 
-		Location spawnLocation = this.plugin.spawnManager().spawn(sender);
+		Location spawnLocation = this.plugin.spawnManager().playerSpawnLocation(sender);
 		sender.teleport(spawnLocation);
 
 		context.sender().sendMessage(Component.translatable("faspawn.command.spawn"));
@@ -39,7 +39,7 @@ public class SpawnCommand extends AbstractCommand {
 	private void spawnOtherHandler(CommandContext<CommandSender> context) {
 		Player player = context.get("player");
 
-		Location spawnLocation = this.plugin.spawnManager().spawn(player);
+		Location spawnLocation = this.plugin.spawnManager().playerSpawnLocation(player);
 		player.teleport(spawnLocation);
 		player.sendMessage(Component.translatable("faspawn.command.spawn"));
 

@@ -32,7 +32,7 @@ public class SetSpawnCommand extends AbstractCommand {
 
 		this.plugin.spawnManager().setGroupSpawn("default", sender.getLocation());
 
-		sender.sendMessage(Component.translatable("faspawn.command.setspawn"));
+		sender.sendMessage(Component.translatable("faspawn.command.setspawn").arguments(Component.text("default")));
 	}
 
 	private void setSpawnCoordinateHandler(CommandContext<CommandSender> context) {
@@ -43,6 +43,6 @@ public class SetSpawnCommand extends AbstractCommand {
 			sender.teleport(location);
 		}
 
-		context.sender().sendMessage(Component.translatable("faspawn.command.setspawn"));
+		context.sender().sendMessage(Component.translatable("faspawn.command.setgroupspawn").arguments(Component.text("default")));
 	}
 }

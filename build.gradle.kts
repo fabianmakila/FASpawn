@@ -19,6 +19,7 @@ dependencies {
         exclude("org.yaml")
     }
     implementation("org.incendo:cloud-paper:2.0.0-beta.2")
+    compileOnly("net.luckperms:api:5.4")
 }
 
 java {

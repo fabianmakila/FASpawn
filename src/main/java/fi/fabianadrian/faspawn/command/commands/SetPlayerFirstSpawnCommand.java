@@ -34,7 +34,7 @@ public class SetPlayerFirstSpawnCommand extends AbstractCommand {
 
 		this.plugin.spawnManager().setPlayerFirstSpawn(target, sender.getLocation());
 
-		sender.sendMessage(Component.translatable("faspawn.command.setplayerspawn"));
+		sender.sendMessage(Component.translatable("faspawn.command.setplayerspawn").arguments(target.name()));
 	}
 
 	private void setPlayerFirstSpawnCoordinateHandler(CommandContext<CommandSender> context) {
@@ -46,6 +46,6 @@ public class SetPlayerFirstSpawnCommand extends AbstractCommand {
 			sender.teleport(location);
 		}
 
-		context.sender().sendMessage(Component.translatable("faspawn.command.setplayerspawn"));
+		context.sender().sendMessage(Component.translatable("faspawn.command.setplayerspawn").arguments(target.name()));
 	}
 }
