@@ -2,6 +2,7 @@ package fi.fabianadrian.faspawn.command.commands;
 
 import fi.fabianadrian.faspawn.FASpawn;
 import fi.fabianadrian.faspawn.command.FASpawnCommand;
+import fi.fabianadrian.faspawn.util.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -29,12 +30,12 @@ public final class SetGroupFirstSpawnCommand extends FASpawnCommand {
 	}
 
 	private void setGroupFirstSpawnHandler(CommandContext<Player> context) {
-		Player player = context.sender();
+		Player sender = context.sender();
 		String group = context.get("group");
 
-		this.plugin.spawnManager().setGroupFirstSpawn(group, player.getLocation());
+		this.plugin.spawnManager().setGroupFirstSpawn(group, sender.getLocation());
 
-		player.sendMessage(Component.translatable("faspawn.command.setgroupfirstspawn").arguments(Component.text(group)));
+		sender.sendMessage(Component.translatable("faspawn.command.setgroupfirstspawn").arguments(Component.text(group), ComponentUtils.locationComponent(sender.getLocation())));
 	}
 
 	private void setGroupFirstSpawnCoordinateHandler(CommandContext<CommandSender> context) {
@@ -46,6 +47,6 @@ public final class SetGroupFirstSpawnCommand extends FASpawnCommand {
 			sender.teleport(location);
 		}
 
-		context.sender().sendMessage(Component.translatable("faspawn.command.setgroupspawn").arguments(Component.text(group)));
+		context.sender().sendMessage(Component.translatable("faspawn.command.setgroupspawn").arguments(Component.text(group), ComponentUtils.locationComponent(location)));
 	}
 }
