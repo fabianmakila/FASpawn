@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
 
-public class UnsetPlayerRespawn extends FASpawnCommand {
-	public UnsetPlayerRespawn(FASpawn plugin) {
+public class UnsetPlayerRespawnCommand extends FASpawnCommand {
+	public UnsetPlayerRespawnCommand(FASpawn plugin) {
 		super(plugin);
 	}
 

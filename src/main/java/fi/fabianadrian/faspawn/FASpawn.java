@@ -78,16 +78,22 @@ public final class FASpawn extends JavaPlugin {
 				new RootCommand(this),
 				new SetFirstSpawnCommand(this),
 				new SetGroupFirstSpawnCommand(this),
+				new SetGroupRespawnCommand(this),
 				new SetGroupSpawnCommand(this),
 				new SetPlayerFirstSpawnCommand(this),
+				new SetPlayerRespawnCommand(this),
 				new SetPlayerSpawnCommand(this),
+				new SetRespawnCommand(this),
 				new SetSpawnCommand(this),
 				new SpawnCommand(this),
 				new UnsetFirstSpawnCommand(this),
 				new UnsetGroupFirstSpawnCommand(this),
+				new UnsetGroupRespawnCommand(this),
 				new UnsetGroupSpawnCommand(this),
 				new UnsetPlayerFirstSpawnCommand(this),
+				new UnsetPlayerRespawnCommand(this),
 				new UnsetPlayerSpawnCommand(this),
+				new UnsetRespawnCommand(this),
 				new UnsetSpawnCommand(this)
 		).forEach(FASpawnCommand::register);
 	}
