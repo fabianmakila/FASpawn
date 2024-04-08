@@ -1,3 +1,5 @@
+import net.minecrell.pluginyml.paper.PaperPluginDescription
+
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -47,4 +49,12 @@ paper {
     main = "fi.fabianadrian.faspawn.FASpawn"
     apiVersion = "1.19"
     authors = listOf("FabianAdrian")
+    dependencies {
+        serverDependencies {
+            register("LuckPerms") {
+                load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+                required = false
+            }
+        }
+    }
 }

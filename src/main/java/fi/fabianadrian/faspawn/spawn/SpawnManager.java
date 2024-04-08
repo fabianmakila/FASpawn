@@ -7,11 +7,9 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.InheritanceNode;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -24,15 +22,15 @@ public class SpawnManager {
 	private static final String FIRST_SPAWN_KEY = "first-spawn-location";
 	private final FASpawn plugin;
 	private final ConfigurationManager configurationManager;
-	private LuckPerms luckPermsApi;
+	private LuckPerms luckPermsApi = null;
 
 	public SpawnManager(FASpawn plugin) {
 		this.plugin = plugin;
 		this.configurationManager = plugin.configurationManager();
 
-		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-		if (provider != null) {
-			this.luckPermsApi = provider.getProvider();
+		try {
+			this.luckPermsApi = plugin.getServer().getServicesManager().load(LuckPerms.class);
+		} catch (NoClassDefFoundError ignored) {
 		}
 	}
 
