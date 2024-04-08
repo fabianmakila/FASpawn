@@ -43,6 +43,6 @@ public final class PlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		Location respawnLocation = this.plugin.spawnManager().location(player, LocationType.RESPAWN);
-		player.teleport(respawnLocation);
+		event.setRespawnLocation(respawnLocation);
 	}
 }
