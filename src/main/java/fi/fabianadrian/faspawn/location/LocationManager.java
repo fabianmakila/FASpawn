@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 public final class LocationManager {
-	private static final String SPAWN_LOCATION_KEY = "spawn-location";
-	private static final String FIRST_SPAWN_LOCATION_KEY = "first-spawn-location";
-	private static final String RESPAWN_LOCATION_KEY = "respawn-location";
 	private final FASpawn plugin;
 	private final ConfigurationManager configurationManager;
 	private LuckPerms luckPermsApi = null;
@@ -35,38 +32,34 @@ public final class LocationManager {
 		}
 	}
 
-	public Location spawnLocation(Player player) {
-		return spawnLocation(player, SPAWN_LOCATION_KEY);
-	}
-
-	public Location firstSpawnLocation(Player player) {
-		return spawnLocation(player, FIRST_SPAWN_LOCATION_KEY);
-	}
-
-	private Location spawnLocation(Player player, String key) {
-		Location spawnLocation = nullablePlayerSpawn(player, key);
+	public Location location(Player player, LocationType locationType) {
+		Location spawnLocation = playerLocation(player, locationType);
 		if (spawnLocation != null) {
 			return spawnLocation;
 		}
 
-		spawnLocation = nullablePlayerGroupSpawn(player, key);
+		spawnLocation = groupLocation(player, locationType);
 		if (spawnLocation != null) {
 			return spawnLocation;
+		}
+
+		if (locationType == LocationType.RESPAWN) {
+			return this.location(player, LocationType.SPAWN);
 		}
 
 		return this.plugin.getServer().getWorlds().get(0).getSpawnLocation().add(0, 1, 0);
 	}
 
-	private @Nullable Location nullablePlayerSpawn(Player player, String key) {
+	private @Nullable Location playerLocation(Player player, LocationType locationType) {
 		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerLocations().get(player.getUniqueId());
 		if (playerSpawnLocations == null) {
 			return null;
 		}
 
-		return playerSpawnLocations.get(key);
+		return playerSpawnLocations.get(locationType.configurationKey);
 	}
 
-	private @Nullable Location nullablePlayerGroupSpawn(Player player, String key) {
+	private @Nullable Location groupLocation(Player player, LocationType locationType) {
 		Map<String, Map<String, Location>> groupSpawns = this.configurationManager.configuration().groupLocations();
 
 		if (groupSpawns.isEmpty()) {
@@ -85,7 +78,7 @@ public final class LocationManager {
 			for (String group : groups) {
 				Map<String, Location> groupSpawnLocations = groupSpawns.get(group);
 				if (groupSpawnLocations != null) {
-					Location spawnLocation = groupSpawnLocations.get(key);
+					Location spawnLocation = groupSpawnLocations.get(locationType.configurationKey);
 					if (spawnLocation == null) {
 						continue;
 					}
@@ -101,36 +94,20 @@ public final class LocationManager {
 			return null;
 		}
 
-		return defaultGroupSpawnLocations.get(key);
+		return defaultGroupSpawnLocations.get(locationType.configurationKey);
 	}
 
-	public void setGroupSpawn(String groupName, Location location) {
-		setGroupSpawn(groupName, location, SPAWN_LOCATION_KEY);
-	}
-
-	public void setGroupFirstSpawn(String groupName, Location location) {
-		setGroupSpawn(groupName, location, FIRST_SPAWN_LOCATION_KEY);
-	}
-
-	private void setGroupSpawn(String groupName, Location location, String key) {
+	public void setGroupLocation(String groupName, Location location, LocationType locationType) {
 		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupLocations().getOrDefault(groupName, new HashMap<>());
-		groupSpawnLocations.put(key, location);
+		groupSpawnLocations.put(locationType.configurationKey, location);
 
 		this.configurationManager.configuration().groupLocations().put(groupName, groupSpawnLocations);
 		this.configurationManager.save();
 	}
 
-	public boolean unsetGroupSpawn(String groupName) {
-		return unsetGroupSpawn(groupName, SPAWN_LOCATION_KEY);
-	}
-
-	public boolean unsetGroupFirstSpawn(String groupName) {
-		return unsetGroupSpawn(groupName, FIRST_SPAWN_LOCATION_KEY);
-	}
-
-	private boolean unsetGroupSpawn(String groupName, String key) {
+	public boolean unsetGroupLocation(String groupName, LocationType locationType) {
 		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupLocations().get(groupName);
-		if (groupSpawnLocations == null || groupSpawnLocations.remove(key) == null) {
+		if (groupSpawnLocations == null || groupSpawnLocations.remove(locationType.configurationKey) == null) {
 			return false;
 		}
 
@@ -142,33 +119,17 @@ public final class LocationManager {
 		return true;
 	}
 
-	public void setPlayerSpawn(OfflinePlayer player, Location location) {
-		setPlayerSpawn(player, location, SPAWN_LOCATION_KEY);
-	}
-
-	public void setPlayerFirstSpawn(OfflinePlayer player, Location location) {
-		setPlayerSpawn(player, location, FIRST_SPAWN_LOCATION_KEY);
-	}
-
-	private void setPlayerSpawn(OfflinePlayer player, Location location, String key) {
+	public void setPlayerLocation(OfflinePlayer player, Location location, LocationType locationType) {
 		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerLocations().getOrDefault(player.getUniqueId(), new HashMap<>());
-		playerSpawnLocations.put(key, location);
+		playerSpawnLocations.put(locationType.configurationKey, location);
 
 		this.configurationManager.configuration().playerLocations().put(player.getUniqueId(), playerSpawnLocations);
 		this.configurationManager.save();
 	}
 
-	public boolean unsetPlayerSpawn(OfflinePlayer player) {
-		return unsetPlayerSpawn(player, SPAWN_LOCATION_KEY);
-	}
-
-	public boolean unsetPlayerFirstSpawn(OfflinePlayer player) {
-		return unsetPlayerSpawn(player, FIRST_SPAWN_LOCATION_KEY);
-	}
-
-	private boolean unsetPlayerSpawn(OfflinePlayer player, String key) {
+	public boolean unsetPlayerLocation(OfflinePlayer player, LocationType locationType) {
 		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerLocations().get(player.getUniqueId());
-		if (playerSpawnLocations == null || playerSpawnLocations.remove(key) == null) {
+		if (playerSpawnLocations == null || playerSpawnLocations.remove(locationType.configurationKey) == null) {
 			return false;
 		}
 

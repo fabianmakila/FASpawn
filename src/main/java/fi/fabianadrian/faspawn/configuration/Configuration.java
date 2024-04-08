@@ -24,7 +24,7 @@ public class Configuration {
 		return this.respectBeds;
 	}
 
-	public boolean respectRespawnAnchors() {
+	public boolean respectAnchors() {
 		return this.respectRespawnAnchors;
 	}
 

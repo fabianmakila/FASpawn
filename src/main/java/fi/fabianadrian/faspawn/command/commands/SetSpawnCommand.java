@@ -2,6 +2,7 @@ package fi.fabianadrian.faspawn.command.commands;
 
 import fi.fabianadrian.faspawn.FASpawn;
 import fi.fabianadrian.faspawn.command.FASpawnCommand;
+import fi.fabianadrian.faspawn.location.LocationType;
 import fi.fabianadrian.faspawn.util.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -31,7 +32,7 @@ public final class SetSpawnCommand extends FASpawnCommand {
 	private void setSpawnHandler(CommandContext<Player> context) {
 		Player sender = context.sender();
 
-		this.plugin.spawnManager().setGroupSpawn("default", sender.getLocation());
+		this.plugin.spawnManager().setGroupLocation("default", sender.getLocation(), LocationType.SPAWN);
 
 		sender.sendMessage(Component.translatable("faspawn.command.setgroupspawn").arguments(Component.text("default"), ComponentUtils.locationComponent(sender.getLocation())));
 	}
@@ -39,7 +40,7 @@ public final class SetSpawnCommand extends FASpawnCommand {
 	private void setSpawnCoordinateHandler(CommandContext<CommandSender> context) {
 		Location location = context.get("location");
 
-		this.plugin.spawnManager().setGroupSpawn("default", location);
+		this.plugin.spawnManager().setGroupLocation("default", location, LocationType.SPAWN);
 		if (context.sender() instanceof Player sender) {
 			sender.teleport(location);
 		}
