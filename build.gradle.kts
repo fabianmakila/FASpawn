@@ -4,6 +4,7 @@ plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "fi.fabianadrian"
@@ -56,5 +57,15 @@ paper {
                 required = false
             }
         }
+    }
+}
+
+spotless {
+    java {
+        endWithNewline()
+        formatAnnotations()
+        indentWithTabs()
+        removeUnusedImports()
+        trimTrailingWhitespace()
     }
 }
