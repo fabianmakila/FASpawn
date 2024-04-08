@@ -6,6 +6,7 @@ import fi.fabianadrian.faspawn.command.processor.FASpawnCommandPreprocessor;
 import fi.fabianadrian.faspawn.configuration.ConfigurationManager;
 import fi.fabianadrian.faspawn.listener.PlayerListener;
 import fi.fabianadrian.faspawn.listener.ServerListener;
+import fi.fabianadrian.faspawn.locale.TranslationManager;
 import fi.fabianadrian.faspawn.spawn.SpawnManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -23,6 +24,8 @@ public final class FASpawn extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		new TranslationManager(getSLF4JLogger());
+
 		this.configurationManager = new ConfigurationManager(this);
 		this.spawnManager = new SpawnManager(this);
 
