@@ -34,7 +34,7 @@ public final class SetFirstSpawnCommand extends FASpawnCommand {
 
 		this.plugin.spawnManager().setGroupLocation("default", sender.getLocation(), LocationType.FIRST_SPAWN);
 
-		sender.sendMessage(Component.translatable("faspawn.command.setgroupspawn").arguments(Component.text("default"), ComponentUtils.locationComponent(sender.getLocation())));
+		sender.sendMessage(Component.translatable("faspawn.command.setgroupfirstspawn").arguments(Component.text("default"), ComponentUtils.locationComponent(sender.getLocation())));
 	}
 
 	private void setFirstSpawnCoordinateHandler(CommandContext<CommandSender> context) {
