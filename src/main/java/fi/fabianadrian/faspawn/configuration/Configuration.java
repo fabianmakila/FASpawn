@@ -11,7 +11,7 @@ public class Configuration {
 	private boolean teleportOnJoin = false;
 
 	private boolean respectBeds = true;
-	private boolean respectRespawnAnchors = true;
+	private boolean respectAnchors = true;
 
 	private Map<String, Map<String, Location>> groupLocations;
 	private Map<UUID, Map<String, Location>> playerLocations;
@@ -25,7 +25,7 @@ public class Configuration {
 	}
 
 	public boolean respectAnchors() {
-		return this.respectRespawnAnchors;
+		return this.respectAnchors;
 	}
 
 	public Map<String, Map<String, Location>> groupLocations() {
