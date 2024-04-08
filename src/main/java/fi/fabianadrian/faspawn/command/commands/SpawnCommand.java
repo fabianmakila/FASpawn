@@ -1,7 +1,7 @@
 package fi.fabianadrian.faspawn.command.commands;
 
 import fi.fabianadrian.faspawn.FASpawn;
-import fi.fabianadrian.faspawn.command.AbstractCommand;
+import fi.fabianadrian.faspawn.command.FASpawnCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -10,7 +10,7 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
 
-public class SpawnCommand extends AbstractCommand {
+public class SpawnCommand extends FASpawnCommand {
 	public SpawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

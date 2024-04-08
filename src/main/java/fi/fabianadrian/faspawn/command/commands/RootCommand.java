@@ -1,13 +1,13 @@
 package fi.fabianadrian.faspawn.command.commands;
 
 import fi.fabianadrian.faspawn.FASpawn;
-import fi.fabianadrian.faspawn.command.AbstractCommand;
+import fi.fabianadrian.faspawn.command.FASpawnCommand;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.context.CommandContext;
 
-public class RootCommand extends AbstractCommand {
+public class RootCommand extends FASpawnCommand {
 	public RootCommand(FASpawn plugin) {
 		super(plugin);
 	}

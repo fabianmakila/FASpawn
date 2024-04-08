@@ -9,13 +9,16 @@ import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-//TODO Remove code duplication
 public class SpawnManager {
 	private static final String SPAWN_KEY = "spawn-location";
 	private static final String FIRST_SPAWN_KEY = "first-spawn-location";
@@ -75,13 +78,10 @@ public class SpawnManager {
 			User user = this.luckPermsApi.getPlayerAdapter(Player.class).getUser(player);
 
 			// Player inherited groups from the highest weight to lowest
-			List<String> groups = user.getNodes(NodeType.INHERITANCE).stream()
-					.map(InheritanceNode::getGroupName)
-					.sorted(Comparator.comparingInt(groupName -> {
-						Group group = this.luckPermsApi.getGroupManager().getGroup(groupName);
-						return group != null ? -group.getWeight().orElse(0) : 0;
-					}))
-					.toList();
+			List<String> groups = user.getNodes(NodeType.INHERITANCE).stream().map(InheritanceNode::getGroupName).sorted(Comparator.comparingInt(groupName -> {
+				Group group = this.luckPermsApi.getGroupManager().getGroup(groupName);
+				return group != null ? -group.getWeight().orElse(0) : 0;
+			})).toList();
 
 			for (String group : groups) {
 				Map<String, Location> groupSpawnLocations = groupSpawns.get(group);
@@ -143,15 +143,15 @@ public class SpawnManager {
 		return true;
 	}
 
-	public void setPlayerSpawn(Player player, Location location) {
+	public void setPlayerSpawn(OfflinePlayer player, Location location) {
 		setPlayerSpawn(player, location, SPAWN_KEY);
 	}
 
-	public void setPlayerFirstSpawn(Player player, Location location) {
+	public void setPlayerFirstSpawn(OfflinePlayer player, Location location) {
 		setPlayerSpawn(player, location, FIRST_SPAWN_KEY);
 	}
 
-	private void setPlayerSpawn(Player player, Location location, String key) {
+	private void setPlayerSpawn(OfflinePlayer player, Location location, String key) {
 		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().getOrDefault(player.getUniqueId(), new HashMap<>());
 		playerSpawnLocations.put(key, location);
 
@@ -159,22 +159,22 @@ public class SpawnManager {
 		this.configurationManager.save();
 	}
 
-	public boolean unsetPlayerSpawn(UUID uuid) {
-		return unsetPlayerSpawn(uuid, SPAWN_KEY);
+	public boolean unsetPlayerSpawn(OfflinePlayer player) {
+		return unsetPlayerSpawn(player, SPAWN_KEY);
 	}
 
-	public boolean unsetPlayerFirstSpawn(UUID uuid) {
-		return unsetPlayerSpawn(uuid, FIRST_SPAWN_KEY);
+	public boolean unsetPlayerFirstSpawn(OfflinePlayer player) {
+		return unsetPlayerSpawn(player, FIRST_SPAWN_KEY);
 	}
 
-	private boolean unsetPlayerSpawn(UUID uuid, String key) {
-		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().get(uuid);
+	private boolean unsetPlayerSpawn(OfflinePlayer player, String key) {
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().get(player.getUniqueId());
 		if (playerSpawnLocations == null || playerSpawnLocations.remove(key) == null) {
 			return false;
 		}
 
 		if (playerSpawnLocations.isEmpty()) {
-			this.configurationManager.configuration().playerSpawns().remove(uuid);
+			this.configurationManager.configuration().playerSpawns().remove(player.getUniqueId());
 		}
 
 		this.configurationManager.save();

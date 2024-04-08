@@ -1,6 +1,6 @@
 package fi.fabianadrian.faspawn;
 
-import fi.fabianadrian.faspawn.command.AbstractCommand;
+import fi.fabianadrian.faspawn.command.FASpawnCommand;
 import fi.fabianadrian.faspawn.command.commands.*;
 import fi.fabianadrian.faspawn.command.processor.FASpawnCommandPreprocessor;
 import fi.fabianadrian.faspawn.configuration.ConfigurationManager;
@@ -38,15 +38,21 @@ public class FASpawn extends JavaPlugin {
 		this.commandManager.registerCommandPreProcessor(new FASpawnCommandPreprocessor<>(this));
 
 		List.of(
-				new SpawnCommand(this),
-				new SetSpawnCommand(this),
+				new RootCommand(this),
 				new SetFirstSpawnCommand(this),
-				new SetGroupSpawnCommand(this),
 				new SetGroupFirstSpawnCommand(this),
-				new SetPlayerSpawnCommand(this),
+				new SetGroupSpawnCommand(this),
 				new SetPlayerFirstSpawnCommand(this),
-				new RootCommand(this)
-		).forEach(AbstractCommand::register);
+				new SetPlayerSpawnCommand(this),
+				new SetSpawnCommand(this),
+				new SpawnCommand(this),
+				new UnsetFirstSpawnCommand(this),
+				new UnsetGroupFirstSpawnCommand(this),
+				new UnsetGroupSpawnCommand(this),
+				new UnsetPlayerFirstSpawnCommand(this),
+				new UnsetPlayerSpawnCommand(this),
+				new UnsetSpawnCommand(this)
+		).forEach(FASpawnCommand::register);
 
 		getServer().getPluginManager().registerEvents(new ServerListener(this), this);
 	}
