@@ -1,4 +1,4 @@
-package fi.fabianadrian.faspawn.spawn;
+package fi.fabianadrian.faspawn.location;
 
 import fi.fabianadrian.faspawn.FASpawn;
 import fi.fabianadrian.faspawn.configuration.ConfigurationManager;
@@ -17,14 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class SpawnManager {
-	private static final String SPAWN_KEY = "spawn-location";
-	private static final String FIRST_SPAWN_KEY = "first-spawn-location";
+public final class LocationManager {
+	private static final String SPAWN_LOCATION_KEY = "spawn-location";
+	private static final String FIRST_SPAWN_LOCATION_KEY = "first-spawn-location";
+	private static final String RESPAWN_LOCATION_KEY = "respawn-location";
 	private final FASpawn plugin;
 	private final ConfigurationManager configurationManager;
 	private LuckPerms luckPermsApi = null;
 
-	public SpawnManager(FASpawn plugin) {
+	public LocationManager(FASpawn plugin) {
 		this.plugin = plugin;
 		this.configurationManager = plugin.configurationManager();
 
@@ -35,11 +36,11 @@ public final class SpawnManager {
 	}
 
 	public Location spawnLocation(Player player) {
-		return spawnLocation(player, SPAWN_KEY);
+		return spawnLocation(player, SPAWN_LOCATION_KEY);
 	}
 
 	public Location firstSpawnLocation(Player player) {
-		return spawnLocation(player, FIRST_SPAWN_KEY);
+		return spawnLocation(player, FIRST_SPAWN_LOCATION_KEY);
 	}
 
 	private Location spawnLocation(Player player, String key) {
@@ -57,7 +58,7 @@ public final class SpawnManager {
 	}
 
 	private @Nullable Location nullablePlayerSpawn(Player player, String key) {
-		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().get(player.getUniqueId());
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerLocations().get(player.getUniqueId());
 		if (playerSpawnLocations == null) {
 			return null;
 		}
@@ -66,7 +67,7 @@ public final class SpawnManager {
 	}
 
 	private @Nullable Location nullablePlayerGroupSpawn(Player player, String key) {
-		Map<String, Map<String, Location>> groupSpawns = this.configurationManager.configuration().groupSpawns();
+		Map<String, Map<String, Location>> groupSpawns = this.configurationManager.configuration().groupLocations();
 
 		if (groupSpawns.isEmpty()) {
 			return null;
@@ -104,37 +105,37 @@ public final class SpawnManager {
 	}
 
 	public void setGroupSpawn(String groupName, Location location) {
-		setGroupSpawn(groupName, location, SPAWN_KEY);
+		setGroupSpawn(groupName, location, SPAWN_LOCATION_KEY);
 	}
 
 	public void setGroupFirstSpawn(String groupName, Location location) {
-		setGroupSpawn(groupName, location, FIRST_SPAWN_KEY);
+		setGroupSpawn(groupName, location, FIRST_SPAWN_LOCATION_KEY);
 	}
 
 	private void setGroupSpawn(String groupName, Location location, String key) {
-		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupSpawns().getOrDefault(groupName, new HashMap<>());
+		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupLocations().getOrDefault(groupName, new HashMap<>());
 		groupSpawnLocations.put(key, location);
 
-		this.configurationManager.configuration().groupSpawns().put(groupName, groupSpawnLocations);
+		this.configurationManager.configuration().groupLocations().put(groupName, groupSpawnLocations);
 		this.configurationManager.save();
 	}
 
 	public boolean unsetGroupSpawn(String groupName) {
-		return unsetGroupSpawn(groupName, SPAWN_KEY);
+		return unsetGroupSpawn(groupName, SPAWN_LOCATION_KEY);
 	}
 
 	public boolean unsetGroupFirstSpawn(String groupName) {
-		return unsetGroupSpawn(groupName, FIRST_SPAWN_KEY);
+		return unsetGroupSpawn(groupName, FIRST_SPAWN_LOCATION_KEY);
 	}
 
 	private boolean unsetGroupSpawn(String groupName, String key) {
-		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupSpawns().get(groupName);
+		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupLocations().get(groupName);
 		if (groupSpawnLocations == null || groupSpawnLocations.remove(key) == null) {
 			return false;
 		}
 
 		if (groupSpawnLocations.isEmpty()) {
-			this.configurationManager.configuration().groupSpawns().remove(groupName);
+			this.configurationManager.configuration().groupLocations().remove(groupName);
 		}
 
 		this.configurationManager.save();
@@ -142,37 +143,37 @@ public final class SpawnManager {
 	}
 
 	public void setPlayerSpawn(OfflinePlayer player, Location location) {
-		setPlayerSpawn(player, location, SPAWN_KEY);
+		setPlayerSpawn(player, location, SPAWN_LOCATION_KEY);
 	}
 
 	public void setPlayerFirstSpawn(OfflinePlayer player, Location location) {
-		setPlayerSpawn(player, location, FIRST_SPAWN_KEY);
+		setPlayerSpawn(player, location, FIRST_SPAWN_LOCATION_KEY);
 	}
 
 	private void setPlayerSpawn(OfflinePlayer player, Location location, String key) {
-		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().getOrDefault(player.getUniqueId(), new HashMap<>());
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerLocations().getOrDefault(player.getUniqueId(), new HashMap<>());
 		playerSpawnLocations.put(key, location);
 
-		this.configurationManager.configuration().playerSpawns().put(player.getUniqueId(), playerSpawnLocations);
+		this.configurationManager.configuration().playerLocations().put(player.getUniqueId(), playerSpawnLocations);
 		this.configurationManager.save();
 	}
 
 	public boolean unsetPlayerSpawn(OfflinePlayer player) {
-		return unsetPlayerSpawn(player, SPAWN_KEY);
+		return unsetPlayerSpawn(player, SPAWN_LOCATION_KEY);
 	}
 
 	public boolean unsetPlayerFirstSpawn(OfflinePlayer player) {
-		return unsetPlayerSpawn(player, FIRST_SPAWN_KEY);
+		return unsetPlayerSpawn(player, FIRST_SPAWN_LOCATION_KEY);
 	}
 
 	private boolean unsetPlayerSpawn(OfflinePlayer player, String key) {
-		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().get(player.getUniqueId());
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerLocations().get(player.getUniqueId());
 		if (playerSpawnLocations == null || playerSpawnLocations.remove(key) == null) {
 			return false;
 		}
 
 		if (playerSpawnLocations.isEmpty()) {
-			this.configurationManager.configuration().playerSpawns().remove(player.getUniqueId());
+			this.configurationManager.configuration().playerLocations().remove(player.getUniqueId());
 		}
 
 		this.configurationManager.save();

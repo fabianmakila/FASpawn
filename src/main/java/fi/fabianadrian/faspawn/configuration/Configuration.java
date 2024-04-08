@@ -10,18 +10,29 @@ import java.util.UUID;
 public class Configuration {
 	private boolean teleportOnJoin = false;
 
-	private Map<String, Map<String, Location>> groupSpawns;
-	private Map<UUID, Map<String, Location>> playerSpawns;
+	private boolean respectBeds = true;
+	private boolean respectRespawnAnchors = true;
+
+	private Map<String, Map<String, Location>> groupLocations;
+	private Map<UUID, Map<String, Location>> playerLocations;
 
 	public boolean teleportOnJoin() {
 		return this.teleportOnJoin;
 	}
 
-	public Map<String, Map<String, Location>> groupSpawns() {
-		return this.groupSpawns;
+	public boolean respectBeds() {
+		return this.respectBeds;
 	}
 
-	public Map<UUID, Map<String, Location>> playerSpawns() {
-		return this.playerSpawns;
+	public boolean respectRespawnAnchors() {
+		return this.respectRespawnAnchors;
+	}
+
+	public Map<String, Map<String, Location>> groupLocations() {
+		return this.groupLocations;
+	}
+
+	public Map<UUID, Map<String, Location>> playerLocations() {
+		return this.playerLocations;
 	}
 }

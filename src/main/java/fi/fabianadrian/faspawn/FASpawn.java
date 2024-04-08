@@ -7,7 +7,7 @@ import fi.fabianadrian.faspawn.configuration.ConfigurationManager;
 import fi.fabianadrian.faspawn.listener.PlayerListener;
 import fi.fabianadrian.faspawn.listener.ServerListener;
 import fi.fabianadrian.faspawn.locale.TranslationManager;
-import fi.fabianadrian.faspawn.spawn.SpawnManager;
+import fi.fabianadrian.faspawn.location.LocationManager;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public final class FASpawn extends JavaPlugin {
 	private PaperCommandManager<CommandSender> commandManager;
-	private SpawnManager spawnManager;
+	private LocationManager spawnManager;
 	private ConfigurationManager configurationManager;
 
 	@Override
@@ -32,7 +32,7 @@ public final class FASpawn extends JavaPlugin {
 		new TranslationManager(getSLF4JLogger());
 
 		this.configurationManager = new ConfigurationManager(this);
-		this.spawnManager = new SpawnManager(this);
+		this.spawnManager = new LocationManager(this);
 
 		this.commandManager = PaperCommandManager.createNative(
 				this,
@@ -65,7 +65,7 @@ public final class FASpawn extends JavaPlugin {
 		this.configurationManager.reload();
 	}
 
-	public SpawnManager spawnManager() {
+	public LocationManager spawnManager() {
 		return this.spawnManager;
 	}
 
