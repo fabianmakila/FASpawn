@@ -8,14 +8,19 @@ import fi.fabianadrian.faspawn.listener.PlayerListener;
 import fi.fabianadrian.faspawn.listener.ServerListener;
 import fi.fabianadrian.faspawn.locale.TranslationManager;
 import fi.fabianadrian.faspawn.spawn.SpawnManager;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.translations.LocaleExtractor;
+import org.incendo.cloud.translations.TranslationBundle;
+import org.incendo.cloud.translations.bukkit.BukkitTranslationBundle;
 
 import java.util.List;
+import java.util.Locale;
 
 public final class FASpawn extends JavaPlugin {
 	private PaperCommandManager<CommandSender> commandManager;
@@ -41,6 +46,12 @@ public final class FASpawn extends JavaPlugin {
 		}
 
 		this.commandManager.registerCommandPreProcessor(new FASpawnCommandPreprocessor<>(this));
+
+		LocaleExtractor<CommandSender> extractor = commandSender -> commandSender.getOrDefault(Identity.LOCALE, Locale.ENGLISH);
+		TranslationBundle<CommandSender> coreBundle = TranslationBundle.core(extractor);
+		TranslationBundle<CommandSender> bukkitBundle = BukkitTranslationBundle.bukkit(extractor);
+		this.commandManager.captionRegistry().registerProvider(coreBundle);
+		this.commandManager.captionRegistry().registerProvider(bukkitBundle);
 
 		registerCommands();
 		registerListeners();

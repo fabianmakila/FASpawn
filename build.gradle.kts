@@ -21,7 +21,10 @@ dependencies {
     implementation("org.spongepowered:configurate-yaml:4.1.2") {
         exclude("org.yaml")
     }
+
     implementation("org.incendo:cloud-paper:2.0.0-beta.2")
+    implementation("org.incendo:cloud-translations-bukkit:1.0.0-beta.2")
+
     compileOnly("net.luckperms:api:5.4")
 }
 
