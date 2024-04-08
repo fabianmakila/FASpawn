@@ -12,13 +12,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.annotation.Nullable;
+import java.util.*;
 
 //TODO Remove code duplication
 public class SpawnManager {
+	private static final String SPAWN_KEY = "spawn-location";
+	private static final String FIRST_SPAWN_KEY = "first-spawn-location";
 	private final FASpawn plugin;
 	private final ConfigurationManager configurationManager;
 	private LuckPerms luckPermsApi;
@@ -33,126 +33,110 @@ public class SpawnManager {
 		}
 	}
 
-	public Location playerSpawnLocation(Player player) {
-		// Return player spawn if exists
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().playerSpawns().get(player.getUniqueId());
-		if (data != null && data.spawnLocation() != null) {
-			return data.spawnLocation();
+	public Location spawnLocation(Player player) {
+		return spawnLocation(player, SPAWN_KEY);
+	}
+
+	public Location firstSpawnLocation(Player player) {
+		return spawnLocation(player, FIRST_SPAWN_KEY);
+	}
+
+	private Location spawnLocation(Player player, String key) {
+		Location spawnLocation = nullablePlayerSpawn(player, key);
+		if (spawnLocation != null) {
+			return spawnLocation;
 		}
 
-		// Return group spawn if exists
-		// If Luckperms is present checks user's groups from the highest weight to lowest. Else defaults to "default" group.
-		Map<String, SpawnLocationHolder> groupSpawns = this.configurationManager.configuration().spawns().groupSpawns();
-		if (!groupSpawns.isEmpty()) {
-			if (this.luckPermsApi != null) {
-				User user = this.luckPermsApi.getPlayerAdapter(Player.class).getUser(player);
-				List<String> groups = user.getNodes(NodeType.INHERITANCE).stream()
-						.map(InheritanceNode::getGroupName)
-						.sorted(Comparator.comparingInt(groupName -> {
-							Group group = this.luckPermsApi.getGroupManager().getGroup(groupName);
-							return group != null ? -group.getWeight().orElse(0) : 0;
-						}))
-						.toList();
-
-				for (String group : groups) {
-					data = groupSpawns.get(group);
-					if (data != null && data.spawnLocation() != null) {
-						return data.spawnLocation();
-					}
-				}
-			}
-
-			data = groupSpawns.get("default");
-			if (data != null && data.spawnLocation() != null) {
-				return data.spawnLocation();
-			}
+		spawnLocation = nullablePlayerGroupSpawn(player, key);
+		if (spawnLocation != null) {
+			return spawnLocation;
 		}
 
 		return this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
 	}
 
-	public Location playerFirstSpawnLocation(Player player) {
-		// Return player spawn if exists
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().playerSpawns().get(player.getUniqueId());
-		if (data != null && data.firstSpawnLocation() != null) {
-			return data.firstSpawnLocation();
+	private @Nullable Location nullablePlayerSpawn(Player player, String key) {
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().get(player.getUniqueId());
+		if (playerSpawnLocations == null) {
+			return null;
 		}
 
-		// Return group spawn if exists
-		// If Luckperms is present checks user's groups from the highest weight to lowest. Else defaults to "default" group.
-		Map<String, SpawnLocationHolder> groupSpawns = this.configurationManager.configuration().spawns().groupSpawns();
-		if (!groupSpawns.isEmpty()) {
-			if (this.luckPermsApi != null) {
-				User user = this.luckPermsApi.getPlayerAdapter(Player.class).getUser(player);
-				List<String> groups = user.getNodes(NodeType.INHERITANCE).stream()
-						.map(InheritanceNode::getGroupName)
-						.sorted(Comparator.comparingInt(groupName -> {
-							Group group = this.luckPermsApi.getGroupManager().getGroup(groupName);
-							return group != null ? -group.getWeight().orElse(0) : 0;
-						}))
-						.toList();
+		return playerSpawnLocations.get(key);
+	}
 
-				for (String group : groups) {
-					data = groupSpawns.get(group);
-					if (data != null && data.firstSpawnLocation() != null) {
-						return data.firstSpawnLocation();
+	private @Nullable Location nullablePlayerGroupSpawn(Player player, String key) {
+		Map<String, Map<String, Location>> groupSpawns = this.configurationManager.configuration().groupSpawns();
+
+		if (groupSpawns.isEmpty()) {
+			return null;
+		}
+
+		if (this.luckPermsApi != null) {
+			User user = this.luckPermsApi.getPlayerAdapter(Player.class).getUser(player);
+
+			// Player inherited groups from the highest weight to lowest
+			List<String> groups = user.getNodes(NodeType.INHERITANCE).stream()
+					.map(InheritanceNode::getGroupName)
+					.sorted(Comparator.comparingInt(groupName -> {
+						Group group = this.luckPermsApi.getGroupManager().getGroup(groupName);
+						return group != null ? -group.getWeight().orElse(0) : 0;
+					}))
+					.toList();
+
+			for (String group : groups) {
+				Map<String, Location> groupSpawnLocations = groupSpawns.get(group);
+				if (groupSpawnLocations != null) {
+					Location spawnLocation = groupSpawnLocations.get(key);
+					if (spawnLocation == null) {
+						continue;
 					}
+
+					return spawnLocation;
 				}
 			}
-
-			data = groupSpawns.get("default");
-			if (data != null && data.firstSpawnLocation() != null) {
-				return data.firstSpawnLocation();
-			}
 		}
 
-		return this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
+		// Lastly try to get the default group spawn.
+		Map<String, Location> defaultGroupSpawnLocations = groupSpawns.get("default");
+		if (defaultGroupSpawnLocations == null) {
+			return null;
+		}
+
+		return defaultGroupSpawnLocations.get(key);
 	}
 
 	public void setGroupSpawn(String groupName, Location location) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().groupSpawns().getOrDefault(groupName, new SpawnLocationHolder());
-		data.spawnLocation(location);
-
-		this.configurationManager.configuration().spawns().groupSpawns().put(groupName, data);
-		this.configurationManager.save();
+		setGroupSpawn(groupName, location, SPAWN_KEY);
 	}
 
 	public void setGroupFirstSpawn(String groupName, Location location) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().groupSpawns().getOrDefault(groupName, new SpawnLocationHolder());
-		data.firstSpawnLocation(location);
+		setGroupSpawn(groupName, location, FIRST_SPAWN_KEY);
+	}
 
-		this.configurationManager.configuration().spawns().groupSpawns().put(groupName, data);
+	private void setGroupSpawn(String groupName, Location location, String key) {
+		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupSpawns().getOrDefault(groupName, new HashMap<>());
+		groupSpawnLocations.put(key, location);
+
+		this.configurationManager.configuration().groupSpawns().put(groupName, groupSpawnLocations);
 		this.configurationManager.save();
 	}
 
 	public boolean unsetGroupSpawn(String groupName) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().groupSpawns().get(groupName);
-		if (data == null || data.spawnLocation() == null) {
-			return false;
-		}
-
-		if (data.firstSpawnLocation() == null) {
-			this.configurationManager.configuration().spawns().groupSpawns().remove(groupName);
-		} else {
-			data.spawnLocation(null);
-			this.configurationManager.configuration().spawns().groupSpawns().put(groupName, data);
-		}
-
-		this.configurationManager.save();
-		return true;
+		return unsetGroupSpawn(groupName, SPAWN_KEY);
 	}
 
 	public boolean unsetGroupFirstSpawn(String groupName) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().groupSpawns().get(groupName);
-		if (data == null || data.firstSpawnLocation() == null) {
+		return unsetGroupSpawn(groupName, FIRST_SPAWN_KEY);
+	}
+
+	private boolean unsetGroupSpawn(String groupName, String key) {
+		Map<String, Location> groupSpawnLocations = this.configurationManager.configuration().groupSpawns().get(groupName);
+		if (groupSpawnLocations == null || groupSpawnLocations.remove(key) == null) {
 			return false;
 		}
 
-		if (data.spawnLocation() == null) {
-			this.configurationManager.configuration().spawns().groupSpawns().remove(groupName);
-		} else {
-			data.firstSpawnLocation(null);
-			this.configurationManager.configuration().spawns().groupSpawns().put(groupName, data);
+		if (groupSpawnLocations.isEmpty()) {
+			this.configurationManager.configuration().groupSpawns().remove(groupName);
 		}
 
 		this.configurationManager.save();
@@ -160,49 +144,37 @@ public class SpawnManager {
 	}
 
 	public void setPlayerSpawn(Player player, Location location) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().playerSpawns().getOrDefault(player.getUniqueId(), new SpawnLocationHolder());
-		data.spawnLocation(location);
-
-		this.configurationManager.configuration().spawns().playerSpawns().put(player.getUniqueId(), data);
-		this.configurationManager.save();
+		setPlayerSpawn(player, location, SPAWN_KEY);
 	}
 
 	public void setPlayerFirstSpawn(Player player, Location location) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().playerSpawns().getOrDefault(player.getUniqueId(), new SpawnLocationHolder());
-		data.firstSpawnLocation(location);
+		setPlayerSpawn(player, location, FIRST_SPAWN_KEY);
+	}
 
-		this.configurationManager.configuration().spawns().playerSpawns().put(player.getUniqueId(), data);
+	private void setPlayerSpawn(Player player, Location location, String key) {
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().getOrDefault(player.getUniqueId(), new HashMap<>());
+		playerSpawnLocations.put(key, location);
+
+		this.configurationManager.configuration().playerSpawns().put(player.getUniqueId(), playerSpawnLocations);
 		this.configurationManager.save();
 	}
 
 	public boolean unsetPlayerSpawn(UUID uuid) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().playerSpawns().get(uuid);
-		if (data == null || data.spawnLocation() == null) {
-			return false;
-		}
-
-		if (data.firstSpawnLocation() == null) {
-			this.configurationManager.configuration().spawns().playerSpawns().remove(uuid);
-		} else {
-			data.spawnLocation(null);
-			this.configurationManager.configuration().spawns().playerSpawns().put(uuid, data);
-		}
-
-		this.configurationManager.save();
-		return true;
+		return unsetPlayerSpawn(uuid, SPAWN_KEY);
 	}
 
 	public boolean unsetPlayerFirstSpawn(UUID uuid) {
-		SpawnLocationHolder data = this.configurationManager.configuration().spawns().playerSpawns().get(uuid);
-		if (data == null || data.firstSpawnLocation() == null) {
+		return unsetPlayerSpawn(uuid, FIRST_SPAWN_KEY);
+	}
+
+	private boolean unsetPlayerSpawn(UUID uuid, String key) {
+		Map<String, Location> playerSpawnLocations = this.configurationManager.configuration().playerSpawns().get(uuid);
+		if (playerSpawnLocations == null || playerSpawnLocations.remove(key) == null) {
 			return false;
 		}
 
-		if (data.spawnLocation() == null) {
-			this.configurationManager.configuration().spawns().playerSpawns().remove(uuid);
-		} else {
-			data.firstSpawnLocation(null);
-			this.configurationManager.configuration().spawns().playerSpawns().put(uuid, data);
+		if (playerSpawnLocations.isEmpty()) {
+			this.configurationManager.configuration().playerSpawns().remove(uuid);
 		}
 
 		this.configurationManager.save();
