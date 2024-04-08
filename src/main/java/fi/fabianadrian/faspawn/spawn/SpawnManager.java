@@ -53,7 +53,7 @@ public final class SpawnManager {
 			return spawnLocation;
 		}
 
-		return this.plugin.getServer().getWorlds().get(0).getSpawnLocation();
+		return this.plugin.getServer().getWorlds().get(0).getSpawnLocation().add(0, 1, 0);
 	}
 
 	private @Nullable Location nullablePlayerSpawn(Player player, String key) {
