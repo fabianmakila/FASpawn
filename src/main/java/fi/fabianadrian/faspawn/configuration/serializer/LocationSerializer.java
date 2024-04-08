@@ -11,7 +11,7 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-public class LocationSerializer implements TypeSerializer<Location> {
+public final class LocationSerializer implements TypeSerializer<Location> {
 	public static final LocationSerializer INSTANCE = new LocationSerializer();
 
 	private static final String WORLD = "world";

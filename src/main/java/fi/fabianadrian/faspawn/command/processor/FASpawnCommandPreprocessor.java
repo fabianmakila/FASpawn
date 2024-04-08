@@ -7,7 +7,7 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;
 import org.incendo.cloud.execution.preprocessor.CommandPreprocessor;
 
-public class FASpawnCommandPreprocessor<C> implements CommandPreprocessor<C> {
+public final class FASpawnCommandPreprocessor<C> implements CommandPreprocessor<C> {
 	private final FASpawn plugin;
 
 	public FASpawnCommandPreprocessor(FASpawn plugin) {

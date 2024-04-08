@@ -10,7 +10,7 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
 
-public class SpawnCommand extends FASpawnCommand {
+public final class SpawnCommand extends FASpawnCommand {
 	public SpawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SpawnManager {
+public final class SpawnManager {
 	private static final String SPAWN_KEY = "spawn-location";
 	private static final String FIRST_SPAWN_KEY = "first-spawn-location";
 	private final FASpawn plugin;

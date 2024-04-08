@@ -11,7 +11,7 @@ import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.context.CommandContext;
 
-public class SetPlayerFirstSpawnCommand extends FASpawnCommand {
+public final class SetPlayerFirstSpawnCommand extends FASpawnCommand {
 	public SetPlayerFirstSpawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

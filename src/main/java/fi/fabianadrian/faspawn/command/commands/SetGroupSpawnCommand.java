@@ -11,7 +11,7 @@ import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.StringParser;
 
-public class SetGroupSpawnCommand extends FASpawnCommand {
+public final class SetGroupSpawnCommand extends FASpawnCommand {
 	public SetGroupSpawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

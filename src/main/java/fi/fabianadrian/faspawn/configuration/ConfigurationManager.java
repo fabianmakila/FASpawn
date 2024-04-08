@@ -5,7 +5,7 @@ import fi.fabianadrian.faspawn.configuration.serializer.LocationSerializer;
 import org.bukkit.Location;
 import org.spongepowered.configurate.ConfigurateException;
 
-public class ConfigurationManager {
+public final class ConfigurationManager {
 	private final ConfigurationLoader<Configuration> configurationLoader;
 	private Configuration configuration;
 

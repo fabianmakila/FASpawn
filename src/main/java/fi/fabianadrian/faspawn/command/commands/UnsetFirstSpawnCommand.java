@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.context.CommandContext;
 
-public class UnsetFirstSpawnCommand extends FASpawnCommand {
+public final class UnsetFirstSpawnCommand extends FASpawnCommand {
 	public UnsetFirstSpawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.context.CommandContext;
 
-public class RootCommand extends FASpawnCommand {
+public final class RootCommand extends FASpawnCommand {
 	public RootCommand(FASpawn plugin) {
 		super(plugin);
 	}
@@ -16,7 +16,6 @@ public class RootCommand extends FASpawnCommand {
 	public void register() {
 		Command.Builder<CommandSender> builder = this.manager.commandBuilder("faspawn");
 
-		// Reload
 		this.manager.command(
 				builder.literal("reload").permission("faspawn.command.root.reload").handler(this::reloadHandler)
 		);
