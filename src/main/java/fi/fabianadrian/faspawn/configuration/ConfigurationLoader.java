@@ -5,6 +5,7 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
@@ -17,6 +18,8 @@ public final class ConfigurationLoader<C> {
 	public ConfigurationLoader(Class<C> configClass, Path configPath, UnaryOperator<ConfigurationOptions> optionsModifier) {
 		this.loader = YamlConfigurationLoader.builder()
 				.path(configPath)
+				.nodeStyle(NodeStyle.BLOCK)
+				.indent(2)
 				.defaultOptions(optionsModifier)
 				.build();
 		try {
