@@ -44,6 +44,6 @@ public final class SpawnCommand extends FASpawnCommand {
 		player.teleport(spawnLocation);
 		player.sendMessage(Component.translatable("faspawn.command.spawn"));
 
-		context.sender().sendMessage(Component.translatable("faspawn.command.spawn.other").arguments(player.name()));
+		context.sender().sendMessage(Component.translatable("faspawn.command.spawn.other", player.name()));
 	}
 }

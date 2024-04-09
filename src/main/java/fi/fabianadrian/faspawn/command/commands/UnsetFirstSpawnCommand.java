@@ -21,9 +21,9 @@ public final class UnsetFirstSpawnCommand extends FASpawnCommand {
 
 	private void unsetFirstSpawnHandler(CommandContext<CommandSender> context) {
 		if (this.plugin.spawnManager().unsetGroupLocation("default", LocationType.FIRST_SPAWN)) {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgroupfirstspawn").arguments(Component.text("default")));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgroupfirstspawn", Component.text("default")));
 		} else {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgroupfirstspawn.spawn-not-set").arguments(Component.text("default")));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgroupfirstspawn.spawn-not-set", Component.text("default")));
 		}
 	}
 }

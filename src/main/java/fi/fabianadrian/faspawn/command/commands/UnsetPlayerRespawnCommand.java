@@ -23,9 +23,9 @@ public class UnsetPlayerRespawnCommand extends FASpawnCommand {
 		Player target = context.get("player");
 
 		if (this.plugin.spawnManager().unsetPlayerLocation(target, LocationType.RESPAWN)) {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerrespawn").arguments(target.name()));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerrespawn", target.name()));
 		} else {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerrespawn.spawn-not-set").arguments(target.name()));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerrespawn.spawn-not-set", target.name()));
 		}
 	}
 }

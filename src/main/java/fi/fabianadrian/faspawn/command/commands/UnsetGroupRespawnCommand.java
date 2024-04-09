@@ -22,9 +22,9 @@ public class UnsetGroupRespawnCommand extends FASpawnCommand {
 		String groupName = context.get("group");
 
 		if (this.plugin.spawnManager().unsetGroupLocation(groupName, LocationType.RESPAWN)) {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgrouprespawn").arguments(Component.text("default")));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgrouprespawn", Component.text("default")));
 		} else {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgrouprespawn.spawn-not-set").arguments(Component.text("default")));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetgrouprespawn.spawn-not-set", Component.text("default")));
 		}
 	}
 }

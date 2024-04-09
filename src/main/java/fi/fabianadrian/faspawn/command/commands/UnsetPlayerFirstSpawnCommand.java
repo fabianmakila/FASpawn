@@ -23,9 +23,9 @@ public final class UnsetPlayerFirstSpawnCommand extends FASpawnCommand {
 		Player target = context.get("player");
 
 		if (this.plugin.spawnManager().unsetPlayerLocation(target, LocationType.FIRST_SPAWN)) {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerfirstspawn").arguments(target.name()));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerfirstspawn", target.name()));
 		} else {
-			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerfirstspawn.spawn-not-set").arguments(target.name()));
+			context.sender().sendMessage(Component.translatable("faspawn.command.unsetplayerfirstspawn.spawn-not-set", target.name()));
 		}
 	}
 }

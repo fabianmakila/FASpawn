@@ -36,7 +36,7 @@ public class SetGroupRespawnCommand extends FASpawnCommand {
 
 		this.plugin.spawnManager().setGroupLocation(group, sender.getLocation(), LocationType.RESPAWN);
 
-		sender.sendMessage(Component.translatable("faspawn.command.setgrouprespawn").arguments(Component.text(group), ComponentUtils.locationComponent(sender.getLocation())));
+		sender.sendMessage(Component.translatable("faspawn.command.setgrouprespawn", Component.text(group), ComponentUtils.locationComponent(sender.getLocation())));
 	}
 
 	private void setGroupRespawnCoordinateHandler(CommandContext<CommandSender> context) {
@@ -48,6 +48,6 @@ public class SetGroupRespawnCommand extends FASpawnCommand {
 			sender.teleport(location);
 		}
 
-		context.sender().sendMessage(Component.translatable("faspawn.command.setgrouprespawn").arguments(Component.text(group), ComponentUtils.locationComponent(location)));
+		context.sender().sendMessage(Component.translatable("faspawn.command.setgrouprespawn", Component.text(group), ComponentUtils.locationComponent(location)));
 	}
 }
