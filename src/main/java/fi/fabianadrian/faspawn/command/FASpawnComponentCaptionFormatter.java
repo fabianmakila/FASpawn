@@ -10,7 +10,7 @@ import org.incendo.cloud.minecraft.extras.caption.RichVariable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FASpawnComponentCaptionFormatter {
+public final class FASpawnComponentCaptionFormatter {
 	public static <C> @NonNull ComponentCaptionFormatter<C> translatable() {
 		return new ComponentCaptionFormatter<>() {
 			@Override
