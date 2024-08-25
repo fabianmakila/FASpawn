@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 public final class TranslationManager {
 	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-	public static final List<Locale> BUNDLED_LOCALES = List.of(new Locale("fi", "FI"));
+	public static final List<Locale> BUNDLED_LOCALES = List.of(Locale.of("fi", "FI"));
 
 	private final Logger logger;
 	private final TranslationRegistry registry;

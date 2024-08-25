@@ -2,9 +2,9 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.0"
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
-    id("com.diffplug.spotless") version "6.25.0"
+    id("com.diffplug.spotless") version "7.0.0.BETA1"
 }
 
 group = "fi.fabianadrian"
@@ -16,20 +16,20 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 
     implementation("org.spongepowered:configurate-yaml:4.1.2") {
         exclude("org.yaml")
     }
 
-    implementation("org.incendo:cloud-paper:2.0.0-beta.2")
-    implementation("org.incendo:cloud-minecraft-extras:2.0.0-beta.2")
+    implementation("org.incendo:cloud-paper:2.0.0-beta.9")
+    implementation("org.incendo:cloud-minecraft-extras:2.0.0-beta.9")
 
     compileOnly("net.luckperms:api:5.4")
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 tasks {

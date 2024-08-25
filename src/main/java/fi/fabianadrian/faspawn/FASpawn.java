@@ -1,7 +1,7 @@
 package fi.fabianadrian.faspawn;
 
 import fi.fabianadrian.faspawn.command.FASpawnCommand;
-import fi.fabianadrian.faspawn.command.FASpawnComponentCaptionFormatter;
+import fi.fabianadrian.faspawn.command.FASpawnCaptionFormatter;
 import fi.fabianadrian.faspawn.command.commands.*;
 import fi.fabianadrian.faspawn.command.processor.FASpawnCommandPreprocessor;
 import fi.fabianadrian.faspawn.configuration.ConfigurationManager;
@@ -16,12 +16,12 @@ import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.caption.TranslatableCaption;
-import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 import java.util.List;
 
 public final class FASpawn extends JavaPlugin {
-	private PaperCommandManager<CommandSender> commandManager;
+	private LegacyPaperCommandManager<CommandSender> commandManager;
 	private LocationManager spawnManager;
 	private ConfigurationManager configurationManager;
 
@@ -32,7 +32,7 @@ public final class FASpawn extends JavaPlugin {
 		this.configurationManager = new ConfigurationManager(this);
 		this.spawnManager = new LocationManager(this);
 
-		this.commandManager = PaperCommandManager.createNative(
+		this.commandManager = LegacyPaperCommandManager.createNative(
 				this,
 				ExecutionCoordinator.simpleCoordinator()
 		);
@@ -45,13 +45,13 @@ public final class FASpawn extends JavaPlugin {
 
 		this.commandManager.registerCommandPreProcessor(new FASpawnCommandPreprocessor<>(this));
 		this.commandManager.captionRegistry().registerProvider(TranslatableCaption.translatableCaptionProvider());
-		MinecraftExceptionHandler.<CommandSender>createNative().defaultHandlers().captionFormatter(FASpawnComponentCaptionFormatter.translatable()).registerTo(this.commandManager);
+		MinecraftExceptionHandler.<CommandSender>createNative().defaultHandlers().captionFormatter(new FASpawnCaptionFormatter<>()).registerTo(this.commandManager);
 
 		registerCommands();
 		registerListeners();
 	}
 
-	public PaperCommandManager<CommandSender> commandManager() {
+	public LegacyPaperCommandManager<CommandSender> commandManager() {
 		return this.commandManager;
 	}
 

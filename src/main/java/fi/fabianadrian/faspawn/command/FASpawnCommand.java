@@ -2,11 +2,11 @@ package fi.fabianadrian.faspawn.command;
 
 import fi.fabianadrian.faspawn.FASpawn;
 import org.bukkit.command.CommandSender;
-import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 public abstract class FASpawnCommand {
 	protected final FASpawn plugin;
-	protected final PaperCommandManager<CommandSender> manager;
+	protected final LegacyPaperCommandManager<CommandSender> manager;
 
 	public FASpawnCommand(FASpawn plugin) {
 		this.plugin = plugin;
