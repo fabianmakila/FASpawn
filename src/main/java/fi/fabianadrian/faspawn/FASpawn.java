@@ -45,7 +45,7 @@ public final class FASpawn extends JavaPlugin {
 
 		this.commandManager.registerCommandPreProcessor(new FASpawnCommandPreprocessor<>(this));
 		this.commandManager.captionRegistry().registerProvider(TranslatableCaption.translatableCaptionProvider());
-		MinecraftExceptionHandler.<CommandSender>createNative().defaultHandlers().captionFormatter(new FASpawnCaptionFormatter<>()).registerTo(this.commandManager);
+		MinecraftExceptionHandler.<CommandSender>createNative().defaultHandlers().captionFormatter(new FASpawnCaptionFormatter()).registerTo(this.commandManager);
 
 		registerCommands();
 		registerListeners();
