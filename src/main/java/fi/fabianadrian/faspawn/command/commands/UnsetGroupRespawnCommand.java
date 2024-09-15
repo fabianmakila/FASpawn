@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.StringParser;
 
-public class UnsetGroupRespawnCommand extends FASpawnCommand {
+public final class UnsetGroupRespawnCommand extends FASpawnCommand {
 	public UnsetGroupRespawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

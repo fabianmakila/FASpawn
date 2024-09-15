@@ -7,7 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.context.CommandContext;
 
-public class UnsetRespawnCommand extends FASpawnCommand {
+public final class UnsetRespawnCommand extends FASpawnCommand {
 	public UnsetRespawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

@@ -13,7 +13,7 @@ import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.parser.standard.StringParser;
 
-public class SetGroupRespawnCommand extends FASpawnCommand {
+public final class SetGroupRespawnCommand extends FASpawnCommand {
 	public SetGroupRespawnCommand(FASpawn plugin) {
 		super(plugin);
 	}

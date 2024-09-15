@@ -13,7 +13,7 @@ import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.context.CommandContext;
 
-public class SetPlayerRespawnCommand extends FASpawnCommand {
+public final class SetPlayerRespawnCommand extends FASpawnCommand {
 	public SetPlayerRespawnCommand(FASpawn plugin) {
 		super(plugin);
 	}
